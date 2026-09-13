@@ -114,7 +114,8 @@
 			</view>
 		</view>
 		<!-- 多规格 - start -->
-		<view class="pop_mask " v-show="openMoreNormPop">
+		<!-- v-if：moreNormDishdata 初始为 null，v-show 关闭状态下也会渲染导致页面渲染数据中断 -->
+		<view class="pop_mask " v-if="openMoreNormPop">
 			<view class="more_norm_pop">
 				<view class="title">
 					{{moreNormDishdata.name}}
