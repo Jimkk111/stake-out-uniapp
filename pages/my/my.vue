@@ -16,7 +16,7 @@
 				</view>
 				<!-- 电话号 -->
 				<view class="phone">
-					<text class="phone_text">{{ phoneNumber | getPhoneNum }}</text>
+					<text class="phone_text">{{ getPhoneNum(phoneNumber) }}</text>
 				</view>
 			</view>
 		</view>
@@ -91,20 +91,20 @@ export default {
 			}
 		}
 	},
-	filters: {
-		getPhoneNum (str) {
-			const reg = /^(\d{3})\d*(\d{4})$/
-			return str.replace(/(\d{3})\d*(\d{4})/, '$1****$2')
-		}
-	},
 	onLoad () {
-		this.psersonUrl = this.$store.state.baseUserInfo && this.$store.state.baseUserInfo.avatarUrl
-		this.nickName = this.$store.state.baseUserInfo && this.$store.state.baseUserInfo.nickName
-		this.gender = this.$store.state.baseUserInfo && this.$store.state.baseUserInfo.gender
+		const baseUserInfo = this.$store.state.baseUserInfo
+		this.psersonUrl = baseUserInfo && baseUserInfo.avatarUrl
+		this.nickName = baseUserInfo && baseUserInfo.nickName
+		this.gender = baseUserInfo && baseUserInfo.gender
 		this.getList()
 	},
 	methods: {
     ...mapMutations(['setAddressBackUrl']),
+		// 手机号脱敏展示（Vue3 移除 filters，改为方法调用）
+		getPhoneNum (str) {
+			if (!str) return ''
+			return str.replace(/(\d{3})\d*(\d{4})/, '$1****$2')
+		},
 			statusWord (status) {
 				switch (status) {
 					case 1:

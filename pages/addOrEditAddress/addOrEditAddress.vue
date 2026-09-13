@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import simpleAddress from '../common/simple-address/simple-address.nvue'
+import simpleAddress from '../common/simple-address/simple-address.vue'
 import { addAddressBook, delAddressBook, queryAddressBookById, editAddressBook } from '../api/api.js'
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
 
@@ -334,7 +334,7 @@ export default {
 				height: 110rpx;
 				line-height: 110rpx;
 			}
-			::v-deep .uni-place{
+			:deep(.uni-place){
 				font-size: 26rpx;
 				font-family: PingFangSC, PingFangSC-Regular;
 				font-weight: 400;
@@ -407,7 +407,7 @@ export default {
 			padding: 20rpx 22rpx;
 			width: 100%;
 			box-sizing: border-box;
-			::v-deep .uni-place{
+			:deep(.uni-place){
 				font-size: 26rpx;
 				font-family: PingFangSC, PingFangSC-Regular;
 				font-weight: 400;
