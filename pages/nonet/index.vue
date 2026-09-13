@@ -2,14 +2,14 @@
 	<view class="nonet_content">
 		<view class="navBar">
 			<view class="leftNav" @click="goback()">
-				<image class="back" src="../../static/btn_back.png" mode=""></image>
+				<image class="back" src="/static/btn_back.png" mode=""></image>
 			</view>
 			<view class="centerNav">
 				瑞吉外送
 			</view>
 		</view>
 		<view class="success_info">
-			<image class="success_icon" src="../../static/noNet.png" mode=""></image>
+			<image class="success_icon" src="/static/noNet.png" mode=""></image>
 			<view class="success_title">
 				网络无法连接
 			</view>

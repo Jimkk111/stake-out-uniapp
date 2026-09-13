@@ -2,14 +2,14 @@
 	<view class="success_content">
 		<!-- <view class="navBar">
 			<view class="leftNav" @click="goback()">
-				<image class="back" src="../../static/btn_back.png" mode=""></image>
+				<image class="back" src="/static/btn_back.png" mode=""></image>
 			</view>
 			<view class="centerNav">
 				{{tableInfo.storeName}}
 			</view>
 		</view> -->
 		<view class="success_info">
-			<image class="success_icon" src="../../static/success.png" mode=""></image>
+			<image class="success_icon" src="/static/success.png" mode=""></image>
 			<view class="success_title">
 				下单成功
 			</view>

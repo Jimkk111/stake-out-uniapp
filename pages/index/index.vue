@@ -6,7 +6,7 @@
 				<!-- 上部 -->
 				<view class="info_top">
 					<view class="info_top_left">
-						<image class="logo_ruiji" src="../../static/logo_ruiji.png"></image>
+						<image class="logo_ruiji" src="/static/logo_ruiji.png"></image>
 					</view>
 					<view class="info_top_right">
 						<view class="right_title">
@@ -15,21 +15,21 @@
 						<view class="right_details">
 							<!-- 左 -->
 							<view class="details_flex">
-								<image class="top_icon" src="../../static/length.png"></image>
+								<image class="top_icon" src="/static/length.png"></image>
 								<text class="icon_text">距离1.5km</text>
 							</view>
 							<!-- 此乃竖线 -->
 							<!-- <text class="vertical-line"></text> -->
 							<!-- 中 -->
 							<view class="details_flex">
-								<image class="top_icon" src="../../static/money.png"></image>
+								<image class="top_icon" src="/static/money.png"></image>
 								<text class="icon_text">配送费6元</text>
 							</view>
 							<!-- 此乃竖线 -->
 							<!-- <text class="vertical-line"></text> -->
 							<!-- 右 -->
 							<view class="details_flex test">
-								<image class="top_icon" src="../../static/time.png"></image>
+								<image class="top_icon" src="/static/time.png"></image>
 								<text class="icon_text">预计时长12min</text>
 							</view>
 						</view>
@@ -69,13 +69,13 @@
 						<!-- item.flavors && item.flavors.length === 0 || item.dishNumber > 0 -->
 						<view class="dish_active" v-if="!item.flavors || item.flavors.length === 0 || item.dishNumber > 0">
 							<!-- 减菜 -->
-							<!-- <image v-if="item.dishNumber > 0" src="../../static/btn_red.png"  @click="redDishAction(item, '普通')" class="dish_red"></image> -->
-							<image v-if="item.dishNumber >= 1" src="../../static/btn_red.png"  @click="redDishAction(item, '普通')" class="dish_red"></image>
-							<!-- <image v-if="item.newCardNumber > 0" src="../../static/btn_red.png"  @click="redDishAction(item, '普通')" class="dish_red"></image> -->
+							<!-- <image v-if="item.dishNumber > 0" src="/static/btn_red.png"  @click="redDishAction(item, '普通')" class="dish_red"></image> -->
+							<image v-if="item.dishNumber >= 1" src="/static/btn_red.png"  @click="redDishAction(item, '普通')" class="dish_red"></image>
+							<!-- <image v-if="item.newCardNumber > 0" src="/static/btn_red.png"  @click="redDishAction(item, '普通')" class="dish_red"></image> -->
 							<text v-if="item.dishNumber > 0" class="dish_number">{{item.dishNumber}}</text>
 							<!-- <text v-if="item.newCardNumber > 0" class="dish_number">{{item.newCardNumber}}</text> -->
 							<!-- 加菜 -->
-							<image src="../../static/btn_add.png" class="dish_add" @click="addDishAction(item, '普通')"></image>
+							<image src="/static/btn_add.png" class="dish_add" @click="addDishAction(item, '普通')"></image>
 						</view>
 						<view class="dish_active_btn" v-else>
 							<view class="check_but" @click="moreNormDataesHandle(item)"> 选择规格 </view>
@@ -91,7 +91,7 @@
 		<view class="mask-box"></view>
 		<view class="footer_order_buttom" v-if="orderListDataes.length === 0">
 			<view class="order_number">
-				<image src="../../static/btn_waiter_nor.png" class="order_number_icon" mode=""></image>
+				<image src="/static/btn_waiter_nor.png" class="order_number_icon" mode=""></image>
 			</view>
 			<view class="order_price">
 				 <text class="ico">￥</text> 0
@@ -103,7 +103,7 @@
 		<!-- 真结算 -->
 		<view class="footer_order_buttom order_form" v-else>
 			<view class="order_number" @click="() => openOrderCartList = !openOrderCartList">
-				<image src="../../static/btn_waiter_sel.png" class="order_number_icon" mode=""></image>
+				<image src="/static/btn_waiter_sel.png" class="order_number_icon" mode=""></image>
 				<view class="order_dish_num"> {{orderDishNumber}} </view>
 			</view>
 			<view class="order_price">
@@ -136,17 +136,17 @@
 						 <text class="ico"> ￥ </text> {{moreNormDishdata.price}}
 					</view>
 					<view class="active" v-if="moreNormDishdata.dishNumber && moreNormDishdata.dishNumber > 0">
-						<image src="../../static/btn_red.png"  @click="redDishAction(moreNormDishdata, '普通')" class="dish_red" mode=""></image>
+						<image src="/static/btn_red.png"  @click="redDishAction(moreNormDishdata, '普通')" class="dish_red" mode=""></image>
 						<text class="dish_number">{{moreNormDishdata.dishNumber}}</text>
 						<!-- <text class="dish_number">{{item.newCardNumber}}</text> -->
-						<image src="../../static/btn_add.png" class="dish_add" @click="addDishAction(moreNormDishdata, '普通')" mode=""></image>
+						<image src="/static/btn_add.png" class="dish_add" @click="addDishAction(moreNormDishdata, '普通')" mode=""></image>
 					</view>
 					<view class="active" v-else-if="moreNormDishdata.dishNumber == 0">
 						<view class="dish_card_add" @click="addDishAction(moreNormDishdata, '普通')"> 加入购物车 </view>
 					</view>
 				</view>
 				<view class="close" @click="closeMoreNorm(moreNormDishdata)">
-					<image class="close_img" src="../../static/but_close.png" mode=""></image>
+					<image class="close_img" src="/static/but_close.png" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -167,17 +167,17 @@
 						 <text class="ico"> ￥ </text> {{dishDetailes.price}}
 					</view>
 					<view class="active" v-if="dishDetailes.dishNumber && dishDetailes.dishNumber > 0">
-						<image src="../../static/btn_red.png"  @click="redDishAction(dishDetailes, '普通')" class="dish_red" mode=""></image>
+						<image src="/static/btn_red.png"  @click="redDishAction(dishDetailes, '普通')" class="dish_red" mode=""></image>
 						<text class="dish_number">{{dishDetailes.dishNumber}}</text>
 						<!-- <text class="dish_number">{{item.newCardNumber}}</text> -->
-						<image src="../../static/btn_add.png" class="dish_add" @click="addDishAction(dishDetailes, '普通')" mode=""></image>
+						<image src="/static/btn_add.png" class="dish_add" @click="addDishAction(dishDetailes, '普通')" mode=""></image>
 					</view>
 					<view class="active" v-else-if="dishDetailes.dishNumber == 0">
 						<view class="dish_card_add" @click="addDishAction(dishDetailes, '普通')"> 加入购物车 </view>
 					</view>
 				</view>
 				<view class="close" @click="() => openDetailPop = false">
-					<image class="close_img" src="../../static/but_close.png" mode=""></image>
+					<image class="close_img" src="/static/but_close.png" mode=""></image>
 				</view>
 			</view>
 			<view class="dish_detail_pop" v-else>
@@ -198,17 +198,17 @@
 						 <text class="ico"> ￥ </text> {{dishDetailes.price}}
 					</view>
 					<view class="active" v-if="dishDetailes.dishNumber && dishDetailes.dishNumber > 0">
-						<image src="../../static/btn_red.png"  @click="redDishAction(dishDetailes, '普通')" class="dish_red" mode=""></image>
+						<image src="/static/btn_red.png"  @click="redDishAction(dishDetailes, '普通')" class="dish_red" mode=""></image>
 						<text class="dish_number">{{dishDetailes.dishNumber}}</text>
 						<!-- <text class="dish_number">{{item.newCardNumber}}</text> -->
-						<image src="../../static/btn_add.png" class="dish_add" @click="addDishAction(dishDetailes, '普通')" mode=""></image>
+						<image src="/static/btn_add.png" class="dish_add" @click="addDishAction(dishDetailes, '普通')" mode=""></image>
 					</view>
 					<view class="active" v-else-if="dishDetailes.dishNumber == 0">
 						<view class="dish_card_add" @click="addDishAction(dishDetailes, '普通')"> 加入购物车 </view>
 					</view>
 				</view>
 				<view class="close" @click="() => openDetailPop = false">
-					<image class="close_img" src="../../static/but_close.png" mode=""></image>
+					<image class="close_img" src="/static/but_close.png" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -219,7 +219,7 @@
 				<view class="top_title">
 					<view class="tit"> 购物车 </view>
 					<view class="clear" @click.stop="clearCardOrder()"> 
-					<image class="clear_icon" src="../../static/clear.png" mode=""></image> 
+					<image class="clear_icon" src="/static/clear.png" mode=""></image> 
 						<text class="clear-des">清空 </text>	
 					</view>
 				</view>
@@ -233,9 +233,9 @@
 								<view class="dish_name"> {{ obj.name }} </view>
 								<view class="dish_price"> <text class="ico">￥</text> {{ obj.amount }} </view>
 								<view class="dish_active">
-									<image v-if="obj.number && obj.number > 0" src="../../static/btn_red.png"  @click.stop="redDishAction(obj, '购物车')" class="dish_red" mode=""></image>
+									<image v-if="obj.number && obj.number > 0" src="/static/btn_red.png"  @click.stop="redDishAction(obj, '购物车')" class="dish_red" mode=""></image>
 									<text v-if="obj.number && obj.number > 0" class="dish_number">{{obj.number}}</text>
-									<image src="../../static/btn_add.png" class="dish_add" @click.stop="addDishAction(obj, '购物车')" mode=""></image>
+									<image src="/static/btn_add.png" class="dish_add" @click.stop="addDishAction(obj, '购物车')" mode=""></image>
 								</view>
 							</view>
 						</view>
@@ -247,7 +247,7 @@
 		<!-- 购物车弹框 - end -->
 		<view class="pop_mask" v-show="loaddingSt">
 			<view class="lodding">
-				<image class="lodding_ico" src="../../static/lodding.gif" mode=""></image>
+				<image class="lodding_ico" src="/static/lodding.gif" mode=""></image>
 			</view>
 		</view>
 	</view>

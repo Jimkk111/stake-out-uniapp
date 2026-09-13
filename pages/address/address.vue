@@ -22,7 +22,7 @@
 					</view>
 					<!-- 右边 -->
 					<view class="item_right">
-						<image @click.stop="addOrEdit('编辑', item)" class="edit" src="../../static/edit.png"></image>
+						<image @click.stop="addOrEdit('编辑', item)" class="edit" src="/static/edit.png"></image>
 					</view>
 				</view>
 				<!-- 下部 -->
@@ -45,7 +45,7 @@
 		<empty v-else boxHeight="100%" textLabel="暂无地址"></empty>
 		<view class="add_address">
 			<button class="add_btn" type="primary" plain="true" @click="addOrEdit('新增')">
-				<!-- <image class="img_btn" src="../../static/add.png"></image> -->
+				<!-- <image class="img_btn" src="/static/add.png"></image> -->
 				<text class="add-icon">+</text>
 				添加收货地址
 			</button>

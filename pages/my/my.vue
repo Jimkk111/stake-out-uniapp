@@ -11,8 +11,8 @@
 				<!-- 姓名 -->
 				<view class="name">
 					<text class="name_text">{{ nickName }}</text>
-					<image v-if="String(gender) === '2'" class="name_type" src="../../static/girl.png"></image>
-					<image v-else class="name_type" src="../../static/boy.png"></image>
+					<image v-if="String(gender) === '2'" class="name_type" src="/static/girl.png"></image>
+					<image v-else class="name_type" src="/static/boy.png"></image>
 				</view>
 				<!-- 电话号 -->
 				<view class="phone">
@@ -26,15 +26,15 @@
 			<view class="address_order">
 				<!-- 地址管理 -->
 				<view class="address" @click="goAddress">
-					<image class="location" src="../../static/address.png"></image>
+					<image class="location" src="/static/address.png"></image>
 					<text class="address_word">地址管理</text>
-					<image class="to_right" src="../../static/toRight.png" mode=""></image>
+					<image class="to_right" src="/static/toRight.png" mode=""></image>
 				</view>
 				<!-- 历史订单 -->
 				<view class="order" @click="goOrder">
-					<image class="location" src="../../static/order.png"></image>
+					<image class="location" src="/static/order.png"></image>
 					<text class="order_word">历史订单</text>
-					<image class="to_right" src="../../static/toRight.png" mode=""></image>
+					<image class="to_right" src="/static/toRight.png" mode=""></image>
 				</view>
 			</view>
 			
@@ -82,7 +82,7 @@ import { useCartStore } from '@/stores/cart'
 export default {
 	data () {
 		return {
-			psersonUrl: '../../static/btn_waiter_sel.png',
+			psersonUrl: '/static/btn_waiter_sel.png',
 			nickName: '林之迷',
 			gender: '0',
 			phoneNumber: '18500557668',

@@ -3,7 +3,7 @@
 	<scroll-view class="order_content_box" scroll-y="true" scroll-top="0rpx">
 		<!-- <view class="navBar">
 			<view class="leftNav" @click="goback()">
-				<image class="back" src="../../static/btn_back.png" mode=""></image>
+				<image class="back" src="/static/btn_back.png" mode=""></image>
 			</view>
 			<view class="centerNav">
 				提交订单
@@ -41,7 +41,7 @@
 					</view>
 				</view>
 				<view class="address_image">
-					<image class="to_right" src="../../static/toRight.png" mode=""></image>
+					<image class="to_right" src="/static/toRight.png" mode=""></image>
 				</view>
 			</view>
 			<!-- 下部 -->
@@ -84,7 +84,7 @@
 	</scroll-view>
 	<view class="footer_order_buttom order_form">
 		<view class="order_number">
-			<image src="../../static/btn_waiter_sel.png" class="order_number_icon" mode=""></image>
+			<image src="/static/btn_waiter_sel.png" class="order_number_icon" mode=""></image>
 			<view class="order_dish_num"> {{orderDishNumber}} </view>
 		</view>
 		<view class="order_price">
@@ -105,7 +105,7 @@
 		<view class="pop">
 			<view class="open_table_cont">
 				<view class="cont_icon">
-					<image class="cont_icon_img" src="../../static/unable_pay.png" mode=""></image>
+					<image class="cont_icon_img" src="/static/unable_pay.png" mode=""></image>
 				</view>
 				<view class="cont_tit">
 					该餐桌在支付途中

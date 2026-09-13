@@ -12,7 +12,7 @@ export default {
 		return {
 			platform: 'ios',
 			openPayType: false,
-			psersonUrl: '../../static/btn_waiter_sel.png',
+			psersonUrl: '/static/btn_waiter_sel.png',
 			nickName: '',
 			gender: '0',
 			phoneNumber: '',

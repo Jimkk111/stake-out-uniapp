@@ -8,10 +8,10 @@
           <input class="uni-input" placeholder-class="uni-place" v-model="form.name" placeholder="请输入联系人" maxlength="5" />
           <view class="radio">
             <view class="radio-item" v-for="(item, index) in items" :key="item.value" @click="sexChangeHandle(item.value)">
-              <image v-if="item.value!=form.sex" class="radio-img" src="../../static/icon-radio.png"></image>
-              <image v-else class="radio-img" src="../../static/icon-radio-selected.png"></image>
+              <image v-if="item.value!=form.sex" class="radio-img" src="/static/icon-radio.png"></image>
+              <image v-else class="radio-img" src="/static/icon-radio-selected.png"></image>
               <text class="radio-label">{{item.name}}</text>
-              <!-- <image src="../../static/icon-radio-selected.png"></image> -->
+              <!-- <image src="/static/icon-radio-selected.png"></image> -->
             </view>
           </view>
           <!-- <radio-group @change="radioChange" class="radio">

@@ -1,6 +1,6 @@
 <template>
   <view class="empty-box" :style="{height: boxHeight}">
-    <image class="empty-img" src="./../../static/no_order.png" mode="" />
+    <image class="empty-img" src="/static/no_order.png" mode="" />
     <text class="empty-des">{{textLabel}}</text>
   </view>
 </template>
