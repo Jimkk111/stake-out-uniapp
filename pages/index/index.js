@@ -186,7 +186,14 @@ export default {
 		getNewImage (image) {
 			if (!image) return ''
 			// 后端返回的是 OSS 完整 URL 时直接使用，仅对纯文件名拼接下载地址
-			return /^https?:\/\//.test(image) ? image : `${baseUrl}/common/download?name=${image}`
+			if (/^https?:\/\//.test(image)) {
+				// 黑马教学 OSS 图床已关闭（全量 403），回退到本地占位图
+				if (image.includes('sky-itcast.oss-cn-beijing.aliyuncs.com')) {
+					return '/static/no_order.png'
+				}
+				return image
+			}
+			return `${baseUrl}/common/download?name=${image}`
 		},
 		// 去订单页面
 		goOrder () {

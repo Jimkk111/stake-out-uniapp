@@ -1,6 +1,10 @@
 import { useUserStore } from '@/stores/user'
 import { useAppStore } from '@/stores/app'
 import { baseUrl } from './env'
+
+// 无需登录态即可调用的接口（登录本身要在拿到 sessionId 之前调用）
+const NO_AUTH_URLS = ['/user/login']
+
 // 参数： url:请求地址  params：请求参数  method：请求方式
 export function request({url='', params={}, method='GET'}) {
 	const userStore = useUserStore()
@@ -12,8 +16,9 @@ export function request({url='', params={}, method='GET'}) {
 	}
 
 	const requestRes = new Promise((resolve, reject) => {
-		// 未登录直接拒绝，由页面侧引导授权登录
-		if (!userStore.sessionId) {
+		// 除白名单外，未登录直接拒绝，由页面侧引导授权登录
+		const needAuth = !NO_AUTH_URLS.some((u) => url.startsWith(u))
+		if (needAuth && !userStore.sessionId) {
 			reject({ code: 401, msg: '未登录' })
 			return
 		}
