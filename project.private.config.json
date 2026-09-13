@@ -1,9 +1,9 @@
 {
   "libVersion": "3.17.2",
-  "projectname": "project-rjwm-weixin-uniapp",
+  "projectname": "stake-out-uniapp",
   "condition": {},
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "coverView": true,
     "lazyloadPlaceholderEnable": false,
     "skylineRenderEnable": false,
