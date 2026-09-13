@@ -2,14 +2,15 @@ import {
 	submitOrderSubmit,
 	getAddressBookDefault
 } from '../api/api.js'
-import {mapState, mapMutations} from 'vuex'
+import { useUserStore } from '@/stores/user'
+import { useCartStore } from '@/stores/cart'
+import { useAppStore } from '@/stores/app'
 import { baseUrl } from '../../utils/env'
 
 export default {
 	data () {
 		return {
 			platform: 'ios',
-			orderDishPrice: 0,
 			openPayType: false,
 			psersonUrl: '../../static/btn_waiter_sel.png',
 			nickName: '',
@@ -19,22 +20,29 @@ export default {
 			remark: '',
 			arrivalTime: '',
 			addressBookId: '',
-			// 加入购物车数量
-			orderDishNumber: 0,
 		}
 	},
 	computed: {
+		userStore: () => useUserStore(),
+		cartStore: () => useCartStore(),
 		orderListDataes: function () {
-			return this.orderListData()
+			return this.cartStore.list
+		},
+		// 加入购物车数量
+		orderDishNumber: function () {
+			return this.cartStore.totalCount
+		},
+		// 菜品金额
+		orderDishPrice: function () {
+			return this.cartStore.totalPrice
 		}
 	},
 	onLoad (options) {
 		this.initPlatform()
-		this.psersonUrl = this.$store.state.baseUserInfo && this.$store.state.baseUserInfo.avatarUrl
-		this.nickName = this.$store.state.baseUserInfo && this.$store.state.baseUserInfo.nickName
-		this.gender = this.$store.state.baseUserInfo && this.$store.state.baseUserInfo.gender
-		// 计算订单金额与数量
-		this.computOrderInfo()
+		const baseUserInfo = this.userStore.baseUserInfo
+		this.psersonUrl = baseUserInfo && baseUserInfo.avatarUrl
+		this.nickName = baseUserInfo && baseUserInfo.nickName
+		this.gender = baseUserInfo && baseUserInfo.gender
 		// 获取一小时以后的时间
 		this.getHarfAnOur()
 		// 存在options说明换地址了
@@ -52,8 +60,6 @@ export default {
 		this.getAddressBookDefault()
 	},
 	methods: {
-		...mapState(['orderListData']),
-		...mapMutations(['setAddressBackUrl']),
 		initPlatform(){
 			const res = uni.getSystemInfoSync();
 			this.platform = res.platform
@@ -83,7 +89,7 @@ export default {
 		},
 		// 去地址页面
 		goAddress () {
-			this.setAddressBackUrl('/pages/order/index')
+			useAppStore().setAddressBackUrl('/pages/order/index')
 			uni.redirectTo({
 				url: '/pages/address/address'
 			})
@@ -93,16 +99,6 @@ export default {
 			if (!image) return ''
 			// 后端返回的是 OSS 完整 URL 时直接使用，仅对纯文件名拼接下载地址
 			return /^https?:\/\//.test(image) ? image : `${baseUrl}/common/download?name=${image}`
-		},
-		// 订单里和总订单价格计算
-		computOrderInfo () {
-			let oriData = this.orderListDataes
-			this.orderDishNumber = this.orderDishPrice = 0
-			this.orderDishPrice = 0
-			oriData.map((n,i) => {
-				this.orderDishPrice += n.number * n.amount
-				this.orderDishNumber += n.number
-			})
 		},
 		// 返回上一级
 		goback () {

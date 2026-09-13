@@ -74,8 +74,10 @@
 </template>
 
 <script>
-import { queryOrderUserPage, oneOrderAgain, delShoppingCart } from '../api/api.js'
-import { mapMutations } from 'vuex'
+import { queryOrderUserPage, oneOrderAgain } from '../api/api.js'
+import { useUserStore } from '@/stores/user'
+import { useAppStore } from '@/stores/app'
+import { useCartStore } from '@/stores/cart'
 
 export default {
 	data () {
@@ -92,14 +94,13 @@ export default {
 		}
 	},
 	onLoad () {
-		const baseUserInfo = this.$store.state.baseUserInfo
+		const baseUserInfo = useUserStore().baseUserInfo
 		this.psersonUrl = baseUserInfo && baseUserInfo.avatarUrl
 		this.nickName = baseUserInfo && baseUserInfo.nickName
 		this.gender = baseUserInfo && baseUserInfo.gender
 		this.getList()
 	},
 	methods: {
-    ...mapMutations(['setAddressBackUrl']),
 		// 手机号脱敏展示（Vue3 移除 filters，改为方法调用）
 		getPhoneNum (str) {
 			if (!str) return ''
@@ -150,15 +151,12 @@ export default {
 			})
 		},
 		goAddress () {
-      this.setAddressBackUrl('/pages/my/my')
-			// TODO
+			useAppStore().setAddressBackUrl('/pages/my/my')
 			uni.redirectTo({
 				url: '/pages/address/address?form=' + 'my'
 			})
 		},
 		goOrder () {
-			console.log('-=-=goOrder-=-=-')
-			// TODO
 			uni.navigateTo({
 				url: '/pages/historyOrder/historyOrder'
 			})
@@ -167,15 +165,12 @@ export default {
 			let pages = getCurrentPages()
 			let routeIndex = pages.findIndex(item=>item.route==='pages/index/index')
 			// 先清空购物车
-      await delShoppingCart()
+			await useCartStore().clear()
 			oneOrderAgain({ id }).then(res => {
 				if (res.code === 1) {
 					uni.navigateBack({
 						delta: routeIndex>-1?(pages.length-routeIndex):1
 					})
-					// uni.redirectTo({
-					// 	url: '/pages/index/index?formOrder=' + 'oneMoreOrder'
-					// })
 				}
 			})
 		},

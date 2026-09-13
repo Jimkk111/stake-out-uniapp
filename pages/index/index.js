@@ -4,13 +4,11 @@ import {
 	getCategoryList,
 	dishListByCategoryId,
 	querySetmeaList,
-	getShoppingCartList,
-	newAddShoppingCartAdd,
-	newShoppingCartSub,
-	delShoppingCart,
 	querySetmealDishById
 } from '../api/api.js'
-import {mapState, mapMutations} from 'vuex'
+import { useUserStore } from '@/stores/user'
+import { useCartStore } from '@/stores/cart'
+import { useAppStore } from '@/stores/app'
 import { baseUrl } from '../../utils/env'
 export default {
 	data () {
@@ -33,21 +31,28 @@ export default {
 			typeIndex: 0,
 			// 规格有关的数组
 			flavorDataes: [],
-			// 加入购物车数量
-			orderDishNumber: 0,
-			// 菜品金额
-			orderDishPrice: 0,
 			// 添加一个右侧number更新以后重新刷新接口的id --- 这个id来自左侧菜品分类的id
 			rightIdAndType: {}
 		}
 	},
 	computed: {
+		userStore: () => useUserStore(),
+		cartStore: () => useCartStore(),
+		appStore: () => useAppStore(),
 		// 购物车信息列表
 		orderListDataes: function () {
-			return this.orderListData()
+			return this.cartStore.list
 		},
 		loaddingSt: function () {
-			return this.lodding()
+			return this.appStore.lodding
+		},
+		// 加入购物车数量
+		orderDishNumber: function () {
+			return this.cartStore.totalCount
+		},
+		// 菜品金额
+		orderDishPrice: function () {
+			return this.cartStore.totalPrice
 		},
 		orderAndUserInfo: function () {
 			let orderData = []
@@ -84,11 +89,9 @@ export default {
 	},
 	onShow () {
 		// 有sessionId免授权
-		this.sessionId() && this.init()
+		this.userStore.sessionId && this.init()
 	},
 	methods: {
-		...mapMutations(['initdishListMut', 'setBaseUserInfo', 'setSessionId']),
-		...mapState(['orderListData', 'lodding', 'sessionId']),
 		loginSync () {
 			return new Promise((resolve, reject) => {
 				uni.login({
@@ -113,7 +116,7 @@ export default {
 						uni.getUserProfile({
 							desc: '登录',
 							success: async function (userInfo) {
-								_this.setBaseUserInfo(userInfo.rawData)
+								_this.userStore.setUser(JSON.parse(userInfo.rawData))
 								// 先拿 code 再调登录，避免 uni.login 异步回调与请求的竞态
 								const jsCode = await _this.loginSync()
 								const params = {
@@ -124,7 +127,7 @@ export default {
 								}
 								userLogin(params).then(success => {
 									if (success.code === 1) {
-										success.data && _this.setSessionId(success.data.sessionId)
+										success.data && _this.userStore.setSession(success.data.sessionId)
 										_this.init()
 									}
 								}).catch(err => {
@@ -150,7 +153,7 @@ export default {
 				}
 			})
 			// 调用一次购物车集合---初始化
-			this.getTableOrderDishListes()
+			this.cartStore.refresh()
 		},
 		// 获取菜品列表
 		async getDishListDataes (params, index) {
@@ -184,17 +187,6 @@ export default {
 			if (!image) return ''
 			// 后端返回的是 OSS 完整 URL 时直接使用，仅对纯文件名拼接下载地址
 			return /^https?:\/\//.test(image) ? image : `${baseUrl}/common/download?name=${image}`
-		},
-		// 获取购物车订单列表
-		async getTableOrderDishListes () {
-			// 调用获取购物车集合接口
-			await getShoppingCartList({}).then(res => {
-				if (res.code === 1) {
-					this.initdishListMut(res.data)
-					this.computOrderInfo()
-				}
-			}).catch(err => {
-			})
 		},
 		// 去订单页面
 		goOrder () {
@@ -231,14 +223,12 @@ export default {
 					setmealId: form === '购物车' ? item.setmealId : item.id
 				}
 			}
-			newAddShoppingCartAdd(params).then(res => {
+			this.cartStore.add(params).then(res => {
 				if (res.code === 1) {
 					// 菜品详情弹框隐藏---暂时这么处理，去更新购物车状态
 					this.openDetailPop = false
 					this.openMoreNormPop = false
-					// 调用一次购物车集合---初始化
-					this.getTableOrderDishListes()
-					// 重新调取刷新右侧具体菜品列表
+					// 重新调取刷新右侧具体菜品列表（内部会按购物车数量回显）
 					this.getDishListDataes(this.rightIdAndType)
 				}
 			}).catch(err => {
@@ -258,11 +248,9 @@ export default {
 					setmealId: form === '购物车' ? item.setmealId : item.id
 				}
 			}
-			await newShoppingCartSub(params).then(res => {
+			this.cartStore.sub(params).then(res => {
 				if (res.code === 1) {
-					// 调用一次购物车集合---初始化
-					this.getTableOrderDishListes()
-					// 重新调取刷新右侧具体菜品列表
+					// 重新调取刷新右侧具体菜品列表（内部会按购物车数量回显）
 					this.getDishListDataes(this.rightIdAndType)
 				}
 			}).catch(err => {
@@ -270,11 +258,9 @@ export default {
 		},
 		// 清空购物车
 		clearCardOrder () {
-			delShoppingCart().then(res => {
+			this.cartStore.clear().then(res => {
 				this.openOrderCartList = false
-				// 调用一次购物车集合---初始化
-				this.getTableOrderDishListes()
-				// 重新调取刷新右侧具体菜品列表
+				// 重新调取刷新右侧具体菜品列表（内部会按购物车数量回显）
 				this.getDishListDataes(this.rightIdAndType)
 			}).catch(err => {
 			})
@@ -328,26 +314,12 @@ export default {
 			this.flavorDataes.splice(0, this.flavorDataes.length)
 			this.openMoreNormPop = false
 		},
-		// 订单里和总订单价格计算
-		computOrderInfo () {
-			let oriData = this.orderListDataes
-			this.orderDishNumber = this.orderDishPrice = 0
-			oriData.map((n, i) => {
-				this.orderDishNumber += n.number
-				this.orderDishPrice += n.number * n.amount
-			})
-		},
 		// 处理点餐数量 - 更新菜品已点餐数量
 		setOrderNum () {
 			let ODate = this.dishListData
-			let CData = this.orderListDataes
+			const countMap = this.cartStore.countMap
 			ODate && ODate.map((obj, index) => {
-				obj.dishNumber = 0
-				CData && CData.forEach((tg, ind) => {
-					if (obj.id === tg.dishId) {
-						obj.dishNumber = tg.number
-					}
-				})
+				obj.dishNumber = countMap[obj.id] || 0
 			})
 			if (this.dishListItems.length == 0) {
 				this.dishListItems = ODate

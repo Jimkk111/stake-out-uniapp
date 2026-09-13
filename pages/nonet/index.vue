@@ -5,7 +5,7 @@
 				<image class="back" src="../../static/btn_back.png" mode=""></image>
 			</view>
 			<view class="centerNav">
-				{{tableInfo.storeName}}
+				瑞吉外送
 			</view>
 		</view>
 		<view class="success_info">
@@ -17,24 +17,17 @@
 				点击刷新
 			</view>
 		</view>
-	</view>	
+	</view>
 </template>
 <script>
-	import {mapState, mapMutations, mapActions} from 'vuex'
-	export default {
-		computed:{
-			tableInfo:function(){
-				return this.shopInfo()
-			}
-		},
-		methods: {
-			...mapState(['shopInfo']),
-			goIndex(){
-				uni.navigateTo({url: '/pages/index/index'})
+		export default {
+			methods: {
+				goIndex(){
+					uni.navigateTo({url: '/pages/index/index'})
+				}
 			}
 		}
-	}
-</script>
+	</script>
 <style src="./../common/Navbar/navbar.scss" lang="scss" scoped></style>
 <style lang="scss" scoped>
 	.nonet_content{

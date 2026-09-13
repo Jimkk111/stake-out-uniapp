@@ -29,12 +29,13 @@
 			</view>
       <reach-bottom v-if="finished" :status="loadingStatus"></reach-bottom>
     </view>
-		<empty v-else boxHeight="100%" textLabel="暂无地址"></empty>
+		<empty v-else boxHeight="100%" textLabel="暂无订单"></empty>
 	</view>
 </template>
 
 <script>
-import { queryOrderUserPage, oneOrderAgain, delShoppingCart } from '../api/api.js'
+import { queryOrderUserPage, oneOrderAgain } from '../api/api.js'
+import { useCartStore } from '@/stores/cart'
 import ReachBottom from '@/components/reach-bottom/reach-bottom.vue'
 import Empty from '@/components/empty/empty'
 export default {
@@ -130,16 +131,13 @@ export default {
 		async oneMoreOrder (id) {
 			let pages = getCurrentPages()
 			let routeIndex = pages.findIndex(item=>item.route==='pages/index/index')
-      // 先清空购物车
-      await delShoppingCart()
+			// 先清空购物车
+			await useCartStore().clear()
 			oneOrderAgain({ id }).then(res => {
 				if (res.code === 1) {
 					uni.navigateBack({
 						delta: routeIndex>-1?(pages.length-routeIndex):1
 					})
-					// uni.navigateBack({
-					// 	url: '/pages/index/index?formOrder=' + 'oneMoreOrder'
-					// })
 				}
 			})
 		}

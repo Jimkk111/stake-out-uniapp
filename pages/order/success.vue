@@ -35,26 +35,19 @@
 		</view>
 	</view>	
 </template>
-<script>
-	import {mapState, mapMutations, mapActions} from 'vuex'
-	export default {
-		data () {
-			return {
-				arrivalTime: ''
-			}
-		},
-		computed: {
-			tableInfo:function(){
-				return this.shopInfo()
-			}
-		},
-		onLoad () {
-			// 获取一小时以后的时间
-			this.getHarfAnOur()
-		},
-		methods: {
-			...mapState(['shopInfo']),
-			goIndex () {
+	<script>
+		export default {
+			data () {
+				return {
+					arrivalTime: ''
+				}
+			},
+			onLoad () {
+				// 获取一小时以后的时间
+				this.getHarfAnOur()
+			},
+			methods: {
+				goIndex () {
 				// console.log(23)
 				uni.navigateTo({
 					url: '/pages/index/index?status=' + '不验证'

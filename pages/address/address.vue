@@ -57,7 +57,7 @@
 
 <script>
 import { queryAddressBookList, putAddressBookDefault } from '../api/api.js'
-import { mapState } from 'vuex'
+import { useAppStore } from '@/stores/app'
 import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
 import Empty from '@/components/empty/empty'
 
@@ -82,14 +82,16 @@ export default {
 		}
 	},
   computed:{
-     ...mapState(['addressBackUrl']),
+     appStore: () => useAppStore(),
+     addressBackUrl(){
+       return this.appStore.addressBackUrl
+     },
      statusBarHeight(){
        return uni.getSystemInfoSync().statusBarHeight + 'px'
      }
   },
 	methods: {
     goBack(){
-      console.log('this.addressBackUrl',this.addressBackUrl)
       uni.redirectTo({
         url: this.addressBackUrl
       })

@@ -89,8 +89,7 @@
 			</view>	
 		</view>
 		<view class="mask-box"></view>
-		<!-- orderListData().dishList.length === 0 -->
-		<view class="footer_order_buttom" v-if="orderListData().length === 0">
+		<view class="footer_order_buttom" v-if="orderListDataes.length === 0">
 			<view class="order_number">
 				<image src="../../static/btn_waiter_nor.png" class="order_number_icon" mode=""></image>
 			</view>
