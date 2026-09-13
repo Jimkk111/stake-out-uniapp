@@ -114,25 +114,6 @@
 				去结算
 			</view>
 		</view>
-		<!-- 开桌弹框 - start -->
-		<!-- <view class="pop_mask " v-show="openTablePop">
-			<view class="pop">
-				<view class="open_table_cont">
-					<view class="cont_tit">
-						就餐人数
-					</view>
-					<view class="people_num_act">
-						<image src="../../static/btn_red.png" class="red" @click="setOpenTableNumber('red')" mode=""></image>
-						<text class="people_num"> {{ openTablePeoPleNumber }} </text>
-						<image src="../../static/btn_add.png" class="add" @click="setOpenTableNumber('add')" mode=""></image>
-					</view>
-				</view>
-				<view class="butList">
-					<view class="define" @click="openTableHandle()"> 确定 </view>
-				</view>
-			</view>
-		</view> -->
-		<!-- 开桌弹框 - end -->
 		<!-- 多规格 - start -->
 		<view class="pop_mask " v-show="openMoreNormPop">
 			<view class="more_norm_pop">
@@ -251,7 +232,7 @@
 							</view>
 							<view class="dish_info">
 								<view class="dish_name"> {{ obj.name }} </view>
-								<view class="dish_price"> <text class="ico">￥</text> {{ obj.amount / 100 }} </view>
+								<view class="dish_price"> <text class="ico">￥</text> {{ obj.amount }} </view>
 								<view class="dish_active">
 									<image v-if="obj.number && obj.number > 0" src="../../static/btn_red.png"  @click.stop="redDishAction(obj, '购物车')" class="dish_red" mode=""></image>
 									<text v-if="obj.number && obj.number > 0" class="dish_number">{{obj.number}}</text>

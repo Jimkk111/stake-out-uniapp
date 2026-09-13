@@ -1,43 +1,20 @@
 import navBar from '../common/Navbar/navbar.vue'
-import 
-	{ 
-		openTable, 
-		getTableState, 
-		getList, 
-		clearOrder, 
-		getMoreNorm,
-		getDishDetail, 
-		getDishList, 
-		addDish, 
-		delDish, 
-		getTableOrderDishList, 
-		// 瑞吉外卖相关的接口
-		userLogin, 
-		getCategoryList, 
-		dishListByCategoryId, 
-		commonDownload,
-		// 加菜
-		addShoppingCart,
-		// 查询套餐列表的接口
-		querySetmeaList,
-		// 获取购物车集合
-		getShoppingCartList,
-		// 新的购物车添加逻辑接口
-		newAddShoppingCartAdd,
-		// 新的购物车减少接口
-		newShoppingCartSub,
-		// 清空购物车
-		delShoppingCart,
-		// 此接口为首页查询套餐详情展示的接口
-		querySetmealDishById
-	} from '../api/api.js'
-import initWebScoket from '../../utils/webscoket'
-import {mapState, mapMutations, mapActions} from 'vuex'
+import {
+	userLogin,
+	getCategoryList,
+	dishListByCategoryId,
+	querySetmeaList,
+	getShoppingCartList,
+	newAddShoppingCartAdd,
+	newShoppingCartSub,
+	delShoppingCart,
+	querySetmealDishById
+} from '../api/api.js'
+import {mapState, mapMutations} from 'vuex'
 import { baseUrl } from '../../utils/env'
 export default {
 	data () {
 		return {
-			title: 'Hello',
 			// 去结算部分
 			openOrderCartList: false,
 			// 存放左侧滚动区域菜品分类数组
@@ -48,38 +25,26 @@ export default {
 			dishDetailes: {},
 			openDetailPop: false,
 			openMoreNormPop: false,
-			moreNormDataes: null,
-			tableInfo:null,
 			moreNormDishdata:null,
 			moreNormdata:null,
 			// 套餐中查询到的菜品名称
 			dishMealData:null,
-			openTablePeoPleNumber: 1,
-			orderData: 0,
 			// 选中左侧菜品的索引
 			typeIndex: 0,
-			// 控制菜品详情显示
-			openTablePop: false,
 			// 规格有关的数组
 			flavorDataes: [],
 			// 加入购物车数量
 			orderDishNumber: 0,
 			// 菜品金额
 			orderDishPrice: 0,
-			params: {
-				shopId: 'f3deb',
-				storeId: '1282344676983062530',
-				tableId: '1282346960773238786'
-			 },
-			 // 添加一个右侧number更新以后重新刷新接口的id --- 这个id来自左侧菜品分类的id
-			 rightIdAndType: {}
+			// 添加一个右侧number更新以后重新刷新接口的id --- 这个id来自左侧菜品分类的id
+			rightIdAndType: {}
 		}
 	},
 	computed: {
 		// 购物车信息列表
 		orderListDataes: function () {
 			return this.orderListData()
-			// return this.orderListData().dishList
 		},
 		loaddingSt: function () {
 			return this.lodding()
@@ -109,27 +74,24 @@ export default {
 		uni.onNetworkStatusChange(function(res) {
 			if (res.isConnected == false) {
 				uni.navigateTo({url: '/pages/nonet/index'})
-			} 
+			}
 		})
 		if (options) {
 			if (!options.status && !options.formOrder) {
 				this.getData()
 			}
 		}
-		// 有sessionId免授权
-		// this.sessionId() && this.init()
 	},
 	onShow () {
 		// 有sessionId免授权
 		this.sessionId() && this.init()
 	},
 	methods: {
-		...mapMutations(['setShopInfo', 'initdishListMut', 'setStoreInfo', 'setBaseUserInfo', 'setLodding', 'setSessionId']),
-		...mapState(['shopInfo', 'orderListData', 'baseUserInfo', 'lodding', 'sessionId']),
+		...mapMutations(['initdishListMut', 'setBaseUserInfo', 'setSessionId']),
+		...mapState(['orderListData', 'lodding', 'sessionId']),
 		loginSync () {
 			return new Promise((resolve, reject) => {
 				uni.login({
-					// provider: 'weixin',
 					success: (loginRes) => {
 						if (loginRes.errMsg === 'login:ok') {
 							resolve(loginRes.code)
@@ -139,7 +101,7 @@ export default {
 			})
 		},
 		getData () {
-			let res = wx.getMenuButtonBoundingClientRect()
+			let res = uni.getMenuButtonBoundingClientRect()
 			let _this = this
 			this.selectHeight = res.height
 			uni.showModal({
@@ -176,7 +138,7 @@ export default {
 				}
 			})
 		},
-		
+
 		async init () {
 			// 获取菜品和套餐分类接口
 			getCategoryList().then(res => {
@@ -190,19 +152,8 @@ export default {
 			// 调用一次购物车集合---初始化
 			this.getTableOrderDishListes()
 		},
-		// 开桌操作 开桌后初始化websocket结束点餐信息
-		// async openTableHandle () {
-		// 	openTable({tableId: this.params.tableId, seatNumber: this.openTablePeoPleNumber}).then(res => {
-		// 		this.openTablePop = false
-		// 		// initWebScoket(this.params)
-		// 		this.getTableOrderDishListes()
-		// 		this.computOrderInfo()
-		// 	}).catch(err => {
-		// 	})
-		// },
 		// 获取菜品列表
 		async getDishListDataes (params, index) {
-      console.log('=-=-=-=-=-=-=getDishListDataes-=-params=-',params)
 			this.rightIdAndType = {}
 			this.rightIdAndType = {
 				id: params.id,
@@ -212,7 +163,6 @@ export default {
 			if (params.type === 1) {
 				await dishListByCategoryId(param).then(res => {
 					if (res && res.code === 1) {
-						// 添加一个字段去实时更新加入购物车number数量 ----- newCardNumber
 						this.dishListData = res.data && res.data.map((obj) => ({ ...obj, type: 1, newCardNumber: 0 }))
 					}
 				}).catch(err => {
@@ -252,23 +202,17 @@ export default {
 		},
 		// 加菜 - 添加菜品
 		async addDishAction (item, form) {
-      console.log('this.flavorDataes',this.flavorDataes)
-      // 规格
-      if(this.openMoreNormPop && (!this.flavorDataes || this.flavorDataes.length<=0) ){
-        uni.showToast({
-          title: '请选择规格',
-          icon: 'none',
-        })
-        return false
-      }
-      console.log('-=-=-=addDishAction-=-=-')
-			// 实时更新obj.newCardNumber新添加的字段----加入购物车数量number
-			// item.newCardNumber++
+			// 规格
+			if(this.openMoreNormPop && (!this.flavorDataes || this.flavorDataes.length<=0) ){
+				uni.showToast({
+					title: '请选择规格',
+					icon: 'none',
+				})
+				return false
+			}
 			if(this.orderListDataes && !this.orderListDataes.some(n => n.id == item.dishId) && this.flavorDataes.length > 0) {
 				item.flavorRemark = JSON.stringify(this.flavorDataes)
 			}
-			// const wxUserInfo = this.baseUserInfo()
-			// 有sort字段是菜品
 			let params = {
 				amount: item.price,
 				dishFlavor: this.flavorDataes.join(','),
@@ -289,8 +233,6 @@ export default {
 			}
 			newAddShoppingCartAdd(params).then(res => {
 				if (res.code === 1) {
-					// this.computOrderInfo()
-					// this.setOrderNum()
 					// 菜品详情弹框隐藏---暂时这么处理，去更新购物车状态
 					this.openDetailPop = false
 					this.openMoreNormPop = false
@@ -302,14 +244,8 @@ export default {
 			}).catch(err => {
 			})
 		},
-		// 减菜 - 添加菜品
+		// 减菜 - 减少菜品
 		async redDishAction (item, form) {
-			// 实时更新obj.newCardNumber新添加的字段----加入购物车数量number
-			// if (item.newCardNumber === 0) {
-			// 	item.newCardNumber = 0
-			// } else {
-			// 	item.newCardNumber--
-			// }
 			let params = {}
 			if (item.type === 1 || item.dishId !== null) {
 				params = {
@@ -324,8 +260,6 @@ export default {
 			}
 			await newShoppingCartSub(params).then(res => {
 				if (res.code === 1) {
-					// this.computOrderInfo()
-					// this.setOrderNum()
 					// 调用一次购物车集合---初始化
 					this.getTableOrderDishListes()
 					// 重新调取刷新右侧具体菜品列表
@@ -337,8 +271,6 @@ export default {
 		// 清空购物车
 		clearCardOrder () {
 			delShoppingCart().then(res => {
-				// this.computOrderInfo()
-				// this.setOrderNum()
 				this.openOrderCartList = false
 				// 调用一次购物车集合---初始化
 				this.getTableOrderDishListes()
@@ -347,51 +279,38 @@ export default {
 			}).catch(err => {
 			})
 		},
-		// 打开菜品牌详情
+		// 打开菜品详情
 		openDetailHandle (item) {
 			this.dishDetailes = item
 			if (item.type === 2) {
 				querySetmealDishById({ id: item.id }).then(res => {
-					console.log(res)
 					if (res.code === 1) {
 						this.openDetailPop = true
 						this.dishMealData = res.data
 					}
 				}).catch(err => {
 				})
-				// 老接口
-				// getDishDetail({setmealId:item.dishId}).then(res => {
-				// 	this.openDetailPop = true
-				// 	this.dishMealData= res.data
-				// }).catch(err => {
-				// })
 			} else {
 				this.openDetailPop = true
 			}
 		},
 		// 多规格数据处理
 		moreNormDataesHandle (item) {
-      this.flavorDataes.splice(0)
+			this.flavorDataes.splice(0)
 			this.moreNormDishdata = item
 			this.openMoreNormPop = true
 			this.moreNormdata = item.flavors.map(obj => ({ ...obj, value: JSON.parse(obj.value) }))
-      this.moreNormdata.forEach((item)=>{
-        if(item.value && item.value.length>0){
-          this.flavorDataes.push(item.value[0])
-        }
-      })
-      // this.moreNormdata = item.flavors === null ? [] : item.flavors
-			// getMoreNorm({dishId: item.dishId}).then(res => {
-			// 	this.openMoreNormPop = true
-			// 	this.moreNormdata = res.data
-			// }).catch(err => {
-			// })
+			this.moreNormdata.forEach((item)=>{
+				if(item.value && item.value.length>0){
+					this.flavorDataes.push(item.value[0])
+				}
+			})
 		},
-		// 选规格 处理一行只能选择一种 
+		// 选规格 处理一行只能选择一种
 		checkMoreNormPop (obj, item) {
 			let ind
 			let findst = obj.some(n => {
-				ind = this.flavorDataes.findIndex(o => o == n) 
+				ind = this.flavorDataes.findIndex(o => o == n)
 				return ind != -1
 			})
 			const num = this.flavorDataes.findIndex(it => it == item)
@@ -409,21 +328,12 @@ export default {
 			this.flavorDataes.splice(0, this.flavorDataes.length)
 			this.openMoreNormPop = false
 		},
-		// // 设置开桌人数
-		// setOpenTableNumber (st) {
-		// 	if (st == 'add') {
-		// 		this.openTablePeoPleNumber+=1
-		// 	} else {
-		// 		this.openTablePeoPleNumber =  this.openTablePeoPleNumber > 1 ? this.openTablePeoPleNumber-1 : 1
-		// 	}
-		// },
 		// 订单里和总订单价格计算
 		computOrderInfo () {
 			let oriData = this.orderListDataes
 			this.orderDishNumber = this.orderDishPrice = 0
 			oriData.map((n, i) => {
 				this.orderDishNumber += n.number
-				// this.orderDishPrice += n.number * n.price
 				this.orderDishPrice += n.number * n.amount
 			})
 		},
@@ -436,26 +346,14 @@ export default {
 				CData && CData.forEach((tg, ind) => {
 					if (obj.id === tg.dishId) {
 						obj.dishNumber = tg.number
-						// 对新添加的实时更新newCardNumber字段进行赋值
-						// obj.newCardNumber = tg.number
 					}
 				})
 			})
-			
-			// this.dishListData && this.dishListData.map((obj, index) => {
-			// 	obj.dishNumber = 0
-			// 	this.orderListDataes && this.orderListDataes.forEach((tg, ind) => {
-			// 		if (obj.id === tg.dishId) {
-			// 			obj.dishNumber = tg.number
-			// 		}
-			// 	})
-			// })
 			if (this.dishListItems.length == 0) {
 				this.dishListItems = ODate
 			} else {
 				this.dishListItems.splice(0, this.dishListItems.length, ...ODate)
 			}
-      console.log('-=-=-=-setOrderNum-=-=',this.dishListItems)
 		},
 	}
 }
